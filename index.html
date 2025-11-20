@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For Someone Special ❤️</title>
+
+  <!-- Libraries -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial;
+      background: linear-gradient(135deg, #ba4242, #939e57);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    #app {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ❤️ Floating hearts background */
+    .heart {
+      position: fixed;
+      bottom: -10px;
+      color: #e50830;
+      font-size: 24px;
+      animation: floatUp linear forwards;
+      opacity: 0.8;
+      z-index: 1;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-110vh) scale(1.4);
+        opacity: 0;
+      }
+    }
+
+    #content {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    .step {
+      position: absolute;
+      width: 100%;
+      max-width: 820px;
+      padding: 32px;
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: all 0.6s cubic-bezier(.16, 1, .3, 1);
+      pointer-events: none;
+    }
+
+    .step.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #ec6648, #f43f5e);
+      color: #fff;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(236, 72, 153, .2);
+    }
+
+    .emoji {
+      font-size: 2.6rem;
+      margin-bottom: 14px;
+      display: inline-block;
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #f50808, #ee0000f8, #f50b0b);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .reason-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px;
+      margin: 8px 0;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+      text-align: left;
+    }
+
+    .option-btn {
+      display: block;
+      width: 100%;
+      background: #b85151;
+      padding: 10px 14px;
+      margin: 8px 0;
+      border-radius: 12px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .option-btn.selected {
+      background: #000000;
+      border-color: #a91229;
+    }
+
+    .feedback {
+      margin-top: 8px;
+      color: #775454;
+      font-weight: 700;
+    }
+
+    #progress-container {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      max-width: 420px;
+      height: 6px;
+      background: rgba(200, 201, 203, 0.799);
+      border-radius: 999px;
+      z-index: 120;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #ec4899, #f43f5e);
+      border-radius: 999px;
+      transition: width .45s ease;
+    }
+
+    /* 🔹 Updated photo layout — vertical rectangles */
+    .heart-photos-grid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      margin-top: 16px;
+    }
+
+    .heart-photo {
+      width: 550px;      /* Rectangle width */
+      height: 350px;     /* Rectangle height */
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgb(223, 2, 2);
+    }
+
+    .heart-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @media (max-width: 480px) {
+      .step { padding: 20px; }
+      .emoji { font-size: 2.2rem; }
+      .text-4xl { font-size: 1.6rem; }
+      .heart-photo { width: 200px; height: 130px; }
+    }
+  </style>
+</head>
+<body>
+
+<audio id="bg-music" src="ek dil.mp3" loop preload="auto"></audio>
+
+<div id="app">
+  <div id="progress-container"><div id="progress-bar"></div></div>
+  <main id="content">
+    <!-- Step 1 -->
+    <section class="step active" id="step1">
+      <div class="emoji">❤️</div>
+      <h1 class="text-4xl font-bold mb-3 text-gradient">Hey Handsome..!!</h1>
+      <p class="text-lg text-gray-700 mb-6">I made something special for you... 😍</p>
+      <button class="btn" id="start-btn">Let's Begin</button>
+    </section>
+
+    <!-- Step 2 -->
+    <section class="step" id="step2">
+      <div class="emoji">🎂🎊🍫</div>
+      <h2 class="text-2xl font-bold mb-3 text-gradient">Happiest Birthday My Pookie Man! 🎀</h2>
+      <p class="text-base text-gray-700 mb-6">On your special day, I want you to know how amazing you are.. 🌼💎</p>
+      <button class="btn" id="next-btn-2">What makes you special? 🙈</button>
+    </section>
+
+    <!-- Step 3 -->
+    <section class="step" id="step3">
+      <h2 class="text-2xl font-bold mb-4 text-gradient">Here's why you're incredible</h2>
+      <div class="reason-card"><div class="emoji">💕</div><p>Your kindness brightens every day.</p></div>
+      <div class="reason-card"><div class="emoji">😊</div><p>Your smile lights up the room.</p></div>
+      <div class="reason-card"><div class="emoji">🤪</div><p>Your humor makes life fun.</p></div>
+      <button class="btn mt-3" id="next-btn-3">Fun Questions!</button>
+    </section>
+
+    <!-- Step 4 -->
+    <section class="step" id="step4" style="max-height:80vh;overflow:auto;">
+      <div class="emoji">❓</div>
+      <h2 class="text-2xl font-bold mb-4 text-gradient">Let's Know You Better!</h2>
+      <div class="reason-card" data-q="1">
+        <div class="emoji">🍫</div>
+        <p class="font-semibold">What's your favorite chocolate?</p>
+        <button class="option-btn" data-correct="true">Milk Chocolate</button>
+        <button class="option-btn" data-correct="false">Dark Chocolate</button>
+        <button class="option-btn" data-correct="false">White Chocolate</button>
+        <div class="feedback"></div>
+      </div>
+      <div class="reason-card" data-q="2">
+        <div class="emoji">🎶</div>
+        <p class="font-semibold">Which song makes you happiest?</p>
+        <button class="option-btn" data-correct="true">Happy</button>
+        <button class="option-btn" data-correct="false">Sad Song</button>
+        <button class="option-btn" data-correct="false">Random Beats</button>
+        <div class="feedback"></div>
+      </div>
+      <button class="btn mt-4" id="next-btn-4">Continue</button>
+    </section>
+
+    <!-- Step 5 -->
+    <section class="step" id="step5" style="max-height:80vh;overflow:auto;">
+      <div class="emoji">📸</div>
+      <h2 class="text-2xl font-bold mb-3 text-gradient">Remember When...</h2>
+      <p class="text-gray-700 mb-3">A trip down memory lane 💖</p>
+      <div class="heart-photos-grid">
+  <div class="heart-photo"><img src="html.aditya/adi.html/myphoto.jpg" alt="My photo"></div>
+  <div class="heart-photo"><img src="myphoto.jpg" alt=""></div>
+  <div class="heart-photo"><img src="c:\Users\Admin\Desktop\desktop-wallpaper-new-york-street-ghetto.jpg" alt=""></div>
+  <div class="heart-photo"><img src="adi09.jpg" alt=""></div>
+  <div class="heart-photo"><img src="" alt=""></div>
+  <div class="heart-photo"><img src="mytanu.jpg" alt="My Photo"></div>
+  <div class="heart-photo"><img src="" alt=""></div>
+  <div class="heart-photo"><img src="0000.jpg.webp" alt=""></div>
+  <div class="heart-photo"><img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e" alt=""></div>
+  <div class="heart-photo"><img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e" alt=""></div>
+  <div class="heart-photo"><img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e" alt=""></div>
+</div>
+
+      <button class="btn mt-4" id="next-btn-5">One Last Thing</button>
+    </section>
+
+    <!-- Step 6 -->
+    <section class="step" id="step6">
+      <div class="emoji">🎂</div>
+      <h2 class="text-2xl font-bold mb-3 text-gradient">My Birthday Wish For You</h2>
+      <p class="text-base text-gray-700 mb-6">May your year be filled with joy, laughter, and dreams come true. 🎉</p>
+      <button class="btn" id="confetti-btn">Celebrate!</button>
+      <p class="text-sm text-gray-500 mt-4">Made with ❤️ just for you</p>
+    </section>
+  </main>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const music = document.getElementById('bg-music');
+  const btns = ['start','2','3','4','5'].reduce((a,b)=>({...a,['next'+b]:document.getElementById('next-btn-'+b)}),{});
+  const confettiBtn=document.getElementById('confetti-btn');
+  const progressBar=document.getElementById('progress-bar');
+  let currentStep=1,totalSteps=6;
+
+  const updateProgress=()=>progressBar.style.width=((currentStep-1)/(totalSteps-1))*100+'%';
+  const showStep=n=>{
+    document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+    document.getElementById('step'+n).classList.add('active');
+    currentStep=n;
+    updateProgress();
+    window.scrollTo(0,0);
+  };
+
+  document.getElementById('start-btn').addEventListener('click',async()=>{
+    try{await music.play();}catch{}finally{showStep(2);}
+  });
+
+  btns.next2?.addEventListener('click',()=>showStep(3));
+  btns.next3?.addEventListener('click',()=>showStep(4));
+  btns.next4?.addEventListener('click',()=>showStep(5));
+  btns.next5?.addEventListener('click',()=>showStep(6));
+
+  confettiBtn?.addEventListener('click',()=>confetti({particleCount:160,spread:80,origin:{y:0.6}}));
+
+  document.querySelectorAll('#step4 .option-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const parent=btn.closest('.reason-card');
+      parent.querySelectorAll('.option-btn').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      const feedback=parent.querySelector('.feedback');
+      const correct=btn.dataset.correct==='true';
+      feedback.textContent=correct?"I knew it! 🎉":"Oh no, I didn’t know that 😅";
+      if(correct) confetti({particleCount:60,spread:60,origin:{y:0.6}});
+    });
+  });
+
+  document.addEventListener('click',()=>{if(music.paused) music.play().catch(()=>{});});
+  updateProgress();
+
+  // ❤️ Floating hearts animation
+  function createHeart() {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.textContent = '❤️';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = (4 + Math.random() * 4) + 's';
+    heart.style.fontSize = (16 + Math.random() * 24) + 'px';
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(), 7000);
+  }
+  setInterval(createHeart, 400);
+});
+</script>
+</body>
+</html>
